@@ -12,6 +12,12 @@ type TodosMemory = {
   [key: string]: boolean; // Mapping todo._id to boolean for checked status
 };
 
+type ChartData = {
+  labels: string[];
+  achieved: number[];
+  total: number[];
+};
+
 export default function Home() {
   const { isAuthenticated } = useConvexAuth();
   const userId = useStoreUserEffect();
@@ -22,7 +28,11 @@ export default function Home() {
   const [teamName, setTeamName] = useState("");
   const [createTeamName, setCreateTeamName] = useState("");
   const [findTeamName, setFindTeamName] = useState("");
-  const [chartData, setChartData] = useState({ labels: [], achieved: [], total: [] });
+  const [chartData, setChartData] = useState<ChartData>({
+    labels: [],
+    achieved: [],
+    total: [],
+  });
   const chartInstanceRef = useRef<Chart | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showChat, setShowChat] = useState(false); // Gemini chat window state
@@ -42,13 +52,14 @@ export default function Home() {
 
   useEffect(() => {
     if (todos) {
-      const totalTodos = categories.map((cat) =>
-        todos.filter((todo) => todo.text.includes(cat)).length
+      const totalTodos = categories.map(
+        (cat) => todos.filter((todo) => todo.text.includes(cat)).length
       );
-      const achievedTodos = categories.map((cat) =>
-        todos.filter(
-          (todo) => todo.text.includes(cat) && todosMemory[todo._id.toString()]
-        ).length
+      const achievedTodos = categories.map(
+        (cat) =>
+          todos.filter(
+            (todo) => todo.text.includes(cat) && todosMemory[todo._id.toString()]
+          ).length
       );
       setChartData({
         labels: categories,
@@ -77,7 +88,6 @@ export default function Home() {
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             borderColor: "rgba(54, 162, 235, 1)",
             borderWidth: 1,
-            onClick: () => handleAchievedClick(),
           },
           {
             label: "Total Todos",
@@ -111,11 +121,12 @@ export default function Home() {
     };
   }, [chartData]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (text.trim() === "") return;
 
-    const fullText = `${userId} + ${category} + ${teamName ? `${teamName} + ` : ""}${text}`;
+    const fullText = `${userId} + ${category} + ${teamName ? `${teamName} + ` : ""
+      }${text}`;
     createTodo({
       text: fullText,
     }).then(() => {
@@ -265,22 +276,25 @@ export default function Home() {
             {/* Gemini 1.0 Chat Integration */}
             <div className="chat-section">
               <button onClick={() => setShowChat(!showChat)} className="chat-icon">
-                💬 Open Gemini Chat
+                {showChat ? "Close Chat" : "Gemini Chat"}
               </button>
-
               {showChat && (
                 <iframe
-                  src="https://gemini-chat-eight-bice.vercel.app/"
-                  className="chat-iframe"
-                  title="Gemini Chat"
+                  title="Gemini 1.0 Chat"
+                  src="https://gemini-chat-client.vercel.app/"
+                  className="chat-window"
                 ></iframe>
               )}
             </div>
           </>
         ) : (
-          <SignInButton />
+          <>
+            <p>Please sign in to continue.</p>
+            <SignInButton />
+          </>
         )}
       </div>
+
 
 
 
