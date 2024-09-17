@@ -273,17 +273,19 @@ export default function Home() {
               </div>
             )}
 
-            {/* Gemini 1.0 Chat Integration */}
             <div className="chat-section">
               <button onClick={() => setShowChat(!showChat)} className="chat-icon">
                 {showChat ? "Close Chat" : "Gemini Chat"}
               </button>
               {showChat && (
-                <iframe
-                  title="Gemini 1.0 Chat"
-                  src="https://gemini-chat-client.vercel.app/"
-                  className="chat-window"
-                ></iframe>
+                <a
+                  href="https://gemini-chat-eight-bice.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="chat-link"
+                >
+                  Open Gemini Chat in New Tab
+                </a>
               )}
             </div>
           </>
