@@ -270,7 +270,7 @@ export default function Home() {
 
               {showChat && (
                 <iframe
-                  src="https://gemini-chat.com"
+                  src="https://gemini-chat-eight-bice.vercel.app/"
                   className="chat-iframe"
                   title="Gemini Chat"
                 ></iframe>
